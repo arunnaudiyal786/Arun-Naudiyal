@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a static personal portfolio website (vCard) built with vanilla HTML, CSS, and JavaScript. It's a Jekyll-compatible site that can be deployed to GitHub Pages.
+This is a static personal portfolio website (vCard) built with vanilla HTML, CSS, and JavaScript. It's a Jekyll-compatible site that can be deployed to GitHub Pages. 
 
 ## Development Setup
 
