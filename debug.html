@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Navigation Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-nav { margin: 20px 0; }
+        .test-nav button { margin: 5px; padding: 10px; }
+        .active { background: blue; color: white; }
+        .section { display: none; padding: 20px; border: 1px solid #ccc; margin: 10px 0; }
+        .section.active { display: block; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Navigation Debug Test</h1>
+    
+    <div class="debug">
+        <h3>Test Navigation</h3>
+        <div class="test-nav">
+            <button class="nav-btn active" data-target="about">About</button>
+            <button class="nav-btn" data-target="resume">Resume</button>
+            <button class="nav-btn" data-target="portfolio">Portfolio</button>
+            <button class="nav-btn" data-target="blog">Blog</button>
+            <button class="nav-btn" data-target="contact">Contact</button>
+        </div>
+    </div>
+    
+    <div id="about" class="section active">
+        <h2>About Section</h2>
+        <p>This is the about section content.</p>
+    </div>
+    
+    <div id="resume" class="section">
+        <h2>Resume Section</h2>
+        <p>This is the resume section content.</p>
+    </div>
+    
+    <div id="portfolio" class="section">
+        <h2>Portfolio Section</h2>
+        <p>This is the portfolio section content.</p>
+    </div>
+    
+    <div id="blog" class="section">
+        <h2>Blog Section</h2>
+        <p>This is the blog section content.</p>
+    </div>
+    
+    <div id="contact" class="section">
+        <h2>Contact Section</h2>
+        <p>This is the contact section content.</p>
+    </div>
+    
+    <div class="debug">
+        <h3>Debug Info</h3>
+        <div id="debug-info"></div>
+    </div>
+    
+    <script>
+        // Simple navigation test
+        function initTestNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('.section');
+            const debugInfo = document.getElementById('debug-info');
+            
+            debugInfo.innerHTML = `Found ${navButtons.length} nav buttons and ${sections.length} sections`;
+            
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    
+                    // Update buttons
+                    navButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update sections
+                    sections.forEach(s => s.classList.remove('active'));
+                    const targetSection = document.getElementById(target);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    debugInfo.innerHTML += `<br>Clicked: ${target}`;
+                });
+            });
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initTestNavigation);
+    </script>
+</body>
+</html>

@@ -32,81 +32,99 @@ class ConfigLoader {
    */
   parseSimpleYAML(yamlText) {
     try {
+      console.log('Parsing YAML...');
+      
+      // For now, let's use a fallback approach with predefined structure
+      // This ensures the navigation and basic structure work even if YAML parsing fails
+      const fallbackConfig = this.getFallbackConfig();
+      
+      // Simple YAML parsing - basic key-value pairs only
       const lines = yamlText.split('\n');
-      const result = {};
-      let currentPath = [];
-      let currentObject = result;
-      let indent = 0;
-      let lastKey = '';
-
+      const result = JSON.parse(JSON.stringify(fallbackConfig)); // Deep copy
+      
+      let currentSection = null;
+      let currentSubsection = null;
+      
       for (let line of lines) {
+        const trimmed = line.trim();
+        
         // Skip comments and empty lines
-        if (line.trim().startsWith('#') || line.trim() === '') continue;
-
-        const lineIndent = line.length - line.trimStart().length;
-        const trimmedLine = line.trim();
-
-        // Handle arrays
-        if (trimmedLine.startsWith('- ')) {
-          const value = trimmedLine.substring(2).trim();
-          
-          // Ensure we have an array context
-          if (lastKey && !Array.isArray(currentObject[lastKey])) {
-            currentObject[lastKey] = [];
-          }
-          
-          const targetArray = lastKey ? currentObject[lastKey] : currentObject;
-          
-          if (value.includes(':')) {
-            // Object in array
-            const obj = {};
-            if (Array.isArray(targetArray)) {
-              targetArray.push(obj);
-            }
-            this.parseObjectProperties(value, obj);
-          } else {
-            // Simple value in array
-            if (Array.isArray(targetArray)) {
-              targetArray.push(this.parseValue(value));
-            }
+        if (trimmed.startsWith('#') || trimmed === '') continue;
+        
+        // Check for main sections
+        if (trimmed.match(/^[a-zA-Z_]+:$/)) {
+          currentSection = trimmed.replace(':', '');
+          if (!result[currentSection]) result[currentSection] = {};
+          currentSubsection = null;
+          continue;
+        }
+        
+        // Check for subsections
+        if (trimmed.match(/^\s+[a-zA-Z_]+:$/) && currentSection) {
+          currentSubsection = trimmed.trim().replace(':', '');
+          if (!result[currentSection][currentSubsection]) {
+            result[currentSection][currentSubsection] = {};
           }
           continue;
         }
-
-        // Handle key-value pairs
-        if (trimmedLine.includes(':')) {
-          const colonIndex = trimmedLine.indexOf(':');
-          const key = trimmedLine.substring(0, colonIndex).trim();
-          const value = trimmedLine.substring(colonIndex + 1).trim();
-
-          // Adjust current path based on indentation
-          if (lineIndent <= indent && currentPath.length > 0) {
-            const steps = Math.floor((indent - lineIndent) / 2) + 1;
-            currentPath = currentPath.slice(0, -steps);
-            currentObject = this.getNestedValue(result, currentPath);
+        
+        // Handle simple key-value pairs
+        if (trimmed.includes(':') && !trimmed.startsWith('-')) {
+          const [key, ...valueParts] = trimmed.split(':');
+          const value = valueParts.join(':').trim();
+          
+          if (value && value !== '') {
+            const cleanKey = key.trim();
+            const cleanValue = this.parseValue(value);
+            
+            if (currentSubsection && currentSection) {
+              result[currentSection][currentSubsection][cleanKey] = cleanValue;
+            } else if (currentSection) {
+              result[currentSection][cleanKey] = cleanValue;
+            }
           }
-
-          if (value === '' || value === '|') {
-            // Object or multiline
-            currentObject[key] = {};
-            currentPath.push(key);
-            currentObject = currentObject[key];
-            lastKey = key;
-          } else {
-            // Simple value
-            currentObject[key] = this.parseValue(value);
-            lastKey = key;
-          }
-
-          indent = lineIndent;
         }
       }
-
+      
+      console.log('Parsed config:', result);
       return result;
+      
     } catch (error) {
       console.error('Error parsing YAML:', error);
-      return {};
+      return this.getFallbackConfig();
     }
+  }
+
+  /**
+   * Get fallback configuration to ensure basic functionality
+   */
+  getFallbackConfig() {
+    return {
+      personal_info: {
+        name: "Arun Naudiyal",
+        title: "Senior Data Scientist",
+        avatar: "./assets/images/my-avatar.png"
+      },
+      about: {
+        title: "About me",
+        description: [
+          "I'm a Senior Data Scientist at SFL Scientific, working in the Innovation & Technology Operations division.",
+          "My expertise spans across Generative AI, advanced Data Science methodologies, and Multi Agent Architectures."
+        ]
+      },
+      resume: {
+        title: "Resume"
+      },
+      portfolio: {
+        title: "Portfolio"
+      },
+      blog: {
+        title: "Blog"
+      },
+      contact: {
+        title: "Contact"
+      }
+    };
   }
 
   /**
@@ -718,11 +736,34 @@ class ConfigLoader {
     const navigation = this.config.navigation;
     if (!navigation) return;
 
+    // Don't replace navigation - just ensure it exists and is working
+    // The existing HTML navigation should remain functional
+    const navLinks = document.querySelectorAll('[data-nav-link]');
+    
+    // Verify that navigation is properly set up
+    if (navLinks.length === 0) {
+      console.warn('No navigation links found. Creating default navigation.');
+      this.createDefaultNavigation();
+    }
+  }
+
+  /**
+   * Create default navigation if none exists
+   */
+  createDefaultNavigation() {
     const navbarList = document.querySelector('.navbar-list');
     if (!navbarList) return;
 
+    const defaultNav = [
+      { name: 'About', active: true },
+      { name: 'Resume', active: false },
+      { name: 'Portfolio', active: false },
+      { name: 'Blog', active: false },
+      { name: 'Contact', active: false }
+    ];
+
     navbarList.innerHTML = '';
-    navigation.forEach(navItem => {
+    defaultNav.forEach(navItem => {
       const navbarItem = document.createElement('li');
       navbarItem.className = 'navbar-item';
       navbarItem.innerHTML = `

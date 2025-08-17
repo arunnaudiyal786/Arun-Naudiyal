@@ -8,9 +8,15 @@ This is a static personal portfolio website (vCard) built with vanilla HTML, CSS
 
 ## Development Setup
 
-### Jekyll Development (Primary)
-- Uses Jekyll with GitHub Pages gem
-- Run local development server: `bundle exec jekyll serve`
+### Simple HTTP Server (Recommended)
+- No Ruby/Jekyll dependencies required
+- Run local development server: `./serve.sh` or `python3 -m http.server 4000`
+- Works with the dynamic configuration system out of the box
+
+### Jekyll Development (Alternative)
+- **Note**: Jekyll has compatibility issues with Ruby 3.4+
+- **Solution 1 - Simple Server**: Use `./serve.sh` (recommended)
+- **Solution 2 - Docker**: Use `./docker-serve.sh` (if Docker is installed)
 - Install dependencies: `bundle install`
 - Build site: `bundle exec jekyll build`
 

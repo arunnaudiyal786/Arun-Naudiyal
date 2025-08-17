@@ -1,0 +1,71 @@
+# Jekyll Configuration for Portfolio Website
+
+# Site settings
+title: "Arun Naudiyal - Senior Data Scientist Portfolio"
+description: "Senior Data Scientist at SFL Scientific specializing in Generative AI, Machine Learning, and Multi Agent Architectures"
+url: ""
+baseurl: ""
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Exclude files from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - package.json
+  - package-lock.json
+  - README.md
+  - CONFIG-README.md
+  - CLAUDE.md
+  - test-config.html
+  - website-demo-image/
+
+# Include files that start with dot
+include:
+  - .htaccess
+
+# Collections
+collections_dir: collections
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Disable GitHub metadata to avoid the error
+github: false
+
+# Repository information (optional, only if you want GitHub integration)
+# repository: username/repository-name
+
+# SEO settings
+author: "Arun Naudiyal"
+twitter:
+  username: ""
+  card: summary
+
+# Social links
+social:
+  name: "Arun Naudiyal"
+  links:
+    - "https://linkedin.com/in/arun-naudiyal"
+
+# Sass settings
+sass:
+  sass_dir: assets/css
+  style: compressed
+
+# Server settings for development
+host: 0.0.0.0
+port: 4000
+
+# Liquid settings
+liquid:
+  error_mode: warn
+  strict_filters: false
+  strict_variables: false

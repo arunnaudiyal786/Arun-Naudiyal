@@ -2,17 +2,22 @@
 
 // Initialize configuration loader when DOM is ready
 document.addEventListener('DOMContentLoaded', async function() {
+  // Initialize basic event listeners first
+  initializeEventListeners();
+  
+  // Then load dynamic content
   const configLoader = new ConfigLoader();
   await configLoader.init();
-  
-  // Reinitialize event listeners after content is loaded
-  initializeEventListeners();
 });
 
 // Listen for config loaded event to reinitialize dynamic content event listeners
 document.addEventListener('configLoaded', function() {
+  // Reinitialize dynamic content event listeners
   initializeTestimonialModals();
   initializePortfolioFilters();
+  
+  // Ensure navigation is still working
+  initializeNavigation();
 });
 
 
