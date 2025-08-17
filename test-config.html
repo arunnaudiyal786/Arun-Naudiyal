@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Config Test</title>
+</head>
+<body>
+    <h1>Configuration Test</h1>
+    <div id="output"></div>
+    
+    <script src="./assets/js/config-loader.js"></script>
+    <script>
+        async function testConfig() {
+            const loader = new ConfigLoader();
+            await loader.loadConfig();
+            
+            const output = document.getElementById('output');
+            output.innerHTML = '<pre>' + JSON.stringify(loader.config, null, 2) + '</pre>';
+            
+            console.log('Loaded config:', loader.config);
+        }
+        
+        testConfig();
+    </script>
+</body>
+</html>
