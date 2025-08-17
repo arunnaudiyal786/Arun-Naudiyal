@@ -21,7 +21,13 @@ exclude:
   - README.md
   - CONFIG-README.md
   - CLAUDE.md
+  - SERVER-README.md
   - test-config.html
+  - debug.html
+  - serve.sh
+  - stop-server.sh
+  - docker-serve.sh
+  - Dockerfile
   - website-demo-image/
 
 # Include files that start with dot
@@ -31,14 +37,17 @@ include:
 # Collections
 collections_dir: collections
 
-# Plugins
+# Plugins (GitHub Pages compatible)
 plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-github-metadata
 
-# Disable GitHub metadata to avoid the error
-github: false
+# GitHub metadata settings
+github: 
+  is_project_page: false
+  is_user_page: true
 
 # Repository information (optional, only if you want GitHub integration)
 # repository: username/repository-name

@@ -5,9 +5,15 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Initialize basic event listeners first
   initializeEventListeners();
   
-  // Then load dynamic content
-  const configLoader = new ConfigLoader();
-  await configLoader.init();
+  // Then load dynamic content using GitHub Pages compatible loader
+  const configLoader = window.GitHubPagesLoader ? new GitHubPagesLoader() : 
+                       window.ConfigLoader ? new ConfigLoader() : null;
+  
+  if (configLoader) {
+    await configLoader.init();
+  } else {
+    console.warn('No config loader available');
+  }
 });
 
 // Listen for config loaded event to reinitialize dynamic content event listeners
